@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  accounting.api:
+    image: accounting.api
+    build:
+      context: .
+      dockerfile: Services\Accounting\Accounting.Api\Dockerfile
