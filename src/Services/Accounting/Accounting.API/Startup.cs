@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using accounting.api.AutofacModules;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -15,9 +19,10 @@ namespace accounting.api
         }
 
         public AppConfig Config { get; }
+        public IContainer Container { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services
                 .AddSwaggerGen(c =>
@@ -27,6 +32,12 @@ namespace accounting.api
                 });
             services
                 .AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterModule(new RabbitMqModule(Config.BusConfig));
+            containerBuilder.Populate(services);
+            Container = containerBuilder.Build();
+            return new AutofacServiceProvider(Container);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
