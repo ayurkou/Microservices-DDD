@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Accounting.Api.Controllers
 {
@@ -9,10 +10,23 @@ namespace Accounting.Api.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly ILogger<ValuesController> _logger;
+
+        public ValuesController(ILogger<ValuesController> logger)
+        {
+            _logger = logger;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            var temp = new
+            {
+                A = "a",
+                B = "b"
+            };
+            _logger.LogWarning("Test warninig {@temp}", temp);
             return new string[] { "value1", "value2" };
         }
 

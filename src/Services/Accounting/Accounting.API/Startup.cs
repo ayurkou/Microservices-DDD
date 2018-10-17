@@ -1,15 +1,18 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
 using System.Reflection;
+using Accounting.Api.AutofacModules;
 
 namespace Accounting.Api
 {
@@ -22,9 +25,10 @@ namespace Accounting.Api
         }
 
         public AppConfig Config { get; }
+        public IContainer Container { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             #region API Versioning
             // add the versioned api explorer, which also adds IApiVersionDescriptionProvider service
@@ -79,6 +83,13 @@ namespace Accounting.Api
                     // integrate xml comments
                     options.IncludeXmlComments(XmlCommentsFilePath);
                 });       
+
+            var containerBuilder = new ContainerBuilder();
+            containerBuilder.RegisterModule(new RabbitMqModule(Config.BusConfig));
+            containerBuilder.RegisterModule(new LoggerModule());
+            containerBuilder.Populate(services);
+            Container = containerBuilder.Build();
+            return new AutofacServiceProvider(Container);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
