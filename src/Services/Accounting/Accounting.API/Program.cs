@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MassTransit;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace accounting.api
@@ -14,11 +10,22 @@ namespace accounting.api
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            var host = CreateWebHostBuilder(args);
+            var logger = host.Services.GetService<ILogger<Program>>();
+            var bus = host.Services.GetService<IBusControl>();
+            var applicationLifetime = host.Services.GetService<IApplicationLifetime>();
+            applicationLifetime.ApplicationStopping.Register(() => bus.Stop());
+            
+            using (logger.BeginScope("{app}", "Daytona_Accounting"))
+            {
+                bus.Start();
+                host.Run();
+            }
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IWebHost CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .Build();
     }
 }

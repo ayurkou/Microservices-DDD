@@ -35,6 +35,7 @@ namespace accounting.api
 
             var containerBuilder = new ContainerBuilder();
             containerBuilder.RegisterModule(new RabbitMqModule(Config.BusConfig));
+            containerBuilder.RegisterModule(new LoggerModule());
             containerBuilder.Populate(services);
             Container = containerBuilder.Build();
             return new AutofacServiceProvider(Container);

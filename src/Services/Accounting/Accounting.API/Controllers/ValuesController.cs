@@ -1,19 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace accounting.api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    [Route("api/values")]
     public class ValuesController : ControllerBase
     {
+        private readonly ILogger<ValuesController> _logger;
+
+        public ValuesController(ILogger<ValuesController> logger)
+        {
+            _logger = logger;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
+            var temp = new
+            {
+                A = "a",
+                B = "b"
+            };
+            _logger.LogWarning("Test warninig {@temp}", temp);
             return new string[] { "value1", "value2" };
         }
 
