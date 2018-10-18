@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Accounting.Sdk;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -11,15 +15,17 @@ namespace Accounting.Api.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly ILogger<ValuesController> _logger;
+        private readonly IBus _bus;
 
-        public ValuesController(ILogger<ValuesController> logger)
+        public ValuesController(ILogger<ValuesController> logger, IBus bus)
         {
             _logger = logger;
+            _bus = bus;
         }
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<ActionResult<IEnumerable<string>>> Get()
         {
             var temp = new
             {
@@ -27,6 +33,13 @@ namespace Accounting.Api.Controllers
                 B = "b"
             };
             _logger.LogWarning("Test warninig {@temp}", temp);
+            
+            await _bus.Publish(new TestEvent
+            {
+                Title = "test",
+                CorrelationId = Guid.NewGuid()
+            });
+            
             return new string[] { "value1", "value2" };
         }
 
@@ -41,6 +54,7 @@ namespace Accounting.Api.Controllers
         [HttpPost]
         public void Post([FromBody] string value)
         {
+
         }
 
         // PUT api/values/5

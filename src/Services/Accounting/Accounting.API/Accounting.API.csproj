@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Accounting.Domain\Accounting.Domain.csproj" />
     <ProjectReference Include="..\Accounting.Infrastructure\Accounting.Infrastructure.csproj" />
+    <ProjectReference Include="..\Accounting.Sdk\Accounting.Sdk.csproj" />
   </ItemGroup>
 
   <ItemGroup>
