@@ -5,9 +5,9 @@ using Solera.Daytona.Services.Accounting.Domain.Events;
 
 namespace Accounting.API.Application.DomainEventHandlers
 {
-    public class TestDomainEventHadler : IDomainEventHandler<TestDomainEvent>
+    public class TestDomainEventHadler : IDomainEventHandler<TestInternalDomainEvent>
     {
-        public async Task Handle(TestDomainEvent @event, CancellationToken cancellationToken)
+        public async Task Handle(TestInternalDomainEvent @event, CancellationToken cancellationToken)
         {
             await Task.Run(() => throw new System.NotImplementedException());
         }

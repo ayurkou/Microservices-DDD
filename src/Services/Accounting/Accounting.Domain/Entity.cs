@@ -1,8 +1,9 @@
-﻿namespace Solera.Daytona.Services.Accounting.Domain
-{
-    using System;
-    using System.Collections.Generic;
+﻿using Solera.Daytona.Services.Accounting.Sdk;
+using System;
+using System.Collections.Generic;
 
+namespace Solera.Daytona.Services.Accounting.Domain
+{
     public abstract class Entity
     {
         public virtual string Id { get; protected set; }

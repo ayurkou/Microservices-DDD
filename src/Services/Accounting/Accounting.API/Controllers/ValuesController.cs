@@ -1,16 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Accounting.Sdk;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Solera.Daytona.Services.Accounting.Sdk;
 
 namespace Accounting.Api.Controllers
 {
-    [ApiVersion("0.1", Deprecated = true)]
+    /// <summary>
+    /// Values Controller
+    /// </summary>
+    [ApiVersion("0.1-alpha", Deprecated = true)]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
@@ -23,7 +27,10 @@ namespace Accounting.Api.Controllers
             _bus = bus;
         }
 
-        // GET api/values
+        /// <summary>
+        /// GET values
+        /// </summary>
+        /// <returns>OK</returns> 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<string>>> Get()
         {
@@ -34,7 +41,7 @@ namespace Accounting.Api.Controllers
             };
             _logger.LogWarning("Test warninig {@temp}", temp);
             
-            await _bus.Publish(new TestEvent
+            await _bus.Publish(new NotificationPrefsChangedEvent
             {
                 Title = "test",
                 CorrelationId = Guid.NewGuid()

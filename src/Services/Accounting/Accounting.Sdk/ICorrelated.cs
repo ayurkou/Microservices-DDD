@@ -1,6 +1,6 @@
 using System;
 
-namespace Accounting.Sdk
+namespace Solera.Daytona.Services.Accounting.Sdk
 {
     public interface ICorrelated
     {

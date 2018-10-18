@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Solera.Daytona.Services.Accounting.Domain
+namespace Solera.Daytona.Services.Accounting.Sdk
 {
-    public abstract class DomainEvent : MediatR.INotification
+    public abstract class DomainEvent : MediatR.INotification, ICorrelated
     {
         /// <summary>
         /// Domain Event Type
@@ -23,8 +23,8 @@ namespace Solera.Daytona.Services.Accounting.Domain
         /// <summary>
         /// Event Correlation GUID
         /// </summary>
-        public string CorrelationID { get; set; }
-
+        public Guid CorrelationId { get; set; }
+        
         public DomainEvent()
         {
             this.Created = DateTime.Now;
