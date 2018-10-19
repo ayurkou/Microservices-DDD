@@ -30,11 +30,8 @@ namespace Accounting.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.ConfigureApiVersioning();
-
+            services.AddSwaggerWithApiVersionig();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            services.ConfigureSwaggerDocs();
 
             ///UI client side
             //// Allow sign in via an OpenId Connect provider

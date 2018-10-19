@@ -2,7 +2,9 @@
 using System.Threading.Tasks;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
+using Notifications.API.Hubs;
 
 namespace Notifications.Api.Controllers
 {
@@ -12,6 +14,13 @@ namespace Notifications.Api.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        private readonly IHubContext<NotificationHub> _hubContext;
+
+        public ValuesController(IHubContext<NotificationHub> hubContext)
+        {
+            _hubContext = hubContext;
+        }
+
         // GET api/values
         [HttpGet]
         public async Task<ActionResult<IEnumerable<string>>> Get()
@@ -30,7 +39,7 @@ namespace Notifications.Api.Controllers
         [HttpPost]
         public void Post([FromBody] string value)
         {
-
+            _hubContext.Clients.All.SendAsync("Notification", value);
         }
 
         // PUT api/values/5
