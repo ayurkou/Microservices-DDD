@@ -33,12 +33,16 @@ namespace Accounting.Api
             services.AddSwaggerWithApiVersionig();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            ///UI client side
-            //// Allow sign in via an OpenId Connect provider
+            // TODO: Auth client side
+            // Allow sign in via an OpenId Connect provider like OneLogin
             //services.AddAuthentication(options =>
             //{
-            //    options.DefaultScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            //    options.DefaultScheme = Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationDefaults.AuthenticationScheme;
             //    options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            //})
+            //.AddCookie(options =>
+            //{
+            //    options.LoginPath = "/Account/Login/";
             //})
             //.AddOpenIdConnect(options =>
             //{
@@ -55,6 +59,7 @@ namespace Accounting.Api
             {
                 options.Authority = "https://solera-dev.onelogin.com/oauth2/default";
                 options.Audience = "Daytona";
+                //TODO: configure JWT Token Validation Parameters
                 //options.TokenValidationParameters
             });
 

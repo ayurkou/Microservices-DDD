@@ -29,6 +29,7 @@ namespace Notifications.Api
         }
 
         public AppConfig Config { get; }
+
         public IContainer Container { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -72,7 +73,7 @@ namespace Notifications.Api
                 }
             });
 
-            app.UseSignalR(c => c.MapHub<NotificationHub>($"/{nameof(NotificationHub)}"));
+            app.UseSignalR(b => b.MapHub<NotificationHub>($"/{nameof(NotificationHub)}"));
             app.UseHttpsRedirection();
             app.UseMvc();
         }
